@@ -60,7 +60,7 @@ if nargout == 0
     figure
     set(gcf,'units','normalized',...
         'outerposition',[0.01 0.5 0.3 0.4],...
-        'name','HoypassFilter'))
+        'name','HoypassFilter')
 
     subplot(3,1,1)
     plot(tid, signal, 'b-')
