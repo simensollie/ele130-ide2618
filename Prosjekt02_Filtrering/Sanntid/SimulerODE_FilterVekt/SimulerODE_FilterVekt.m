@@ -99,23 +99,27 @@ while ~JoyMainSwitch
     
     if k==1
         % Initialverdier modell og filter
-
+        m(1) = 0;        % starter med 0 gram
+        m_f(1) = 0;      % filtrert vekt starter på 0
+        m_dot(1) = 0;    % derivert starter på 0
 
         % Eksperimentlengde og tidskonstant filter
         t_max = 10;      % eksperimentlengde
         tau = 2;         % gitt i oppgave
 
     else
-       % Beregner Ts 
+       % Beregner Ts
         Ts = t(k)-t(k-1);
 
         % Integrerer diff.likn. med Eulers forover
-        m_dot(k-1) = ..
-        m(k) = ..
+        % Eksempel12_5.m linje 42-43
+        m_dot(k-1) = w_inn(k-1);
+        m(k) = m(k-1) + Ts * m_dot(k-1);
 
         % Filtrere m(k) før visning i LCD
-        alfa  = ..
-        m_f(k) = ..
+        % Eksempel10_4.m linje 18-24
+        alfa = 1 - exp(-Ts/tau);
+        m_f(k) = (1-alfa)*m_f(k-1) + alfa*m(k);
         
     end
 
