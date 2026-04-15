@@ -90,20 +90,33 @@ while ~JoyMainSwitch
     u(k) = Lys(k);        
  
     if k==1
-        terskelverdi = 0;
+        terskelverdi = 39;
         % Spesifisering av initialverdier og parametere
         v(1) = 0;
-        u_f(1) = 0;
+        u_f(1) = u(1);    % IC = første måling, fikk en stor "spike" ...
+                          % i starten når den var satt til 0
         kant(1) = 0;
+
+        % Ref: Serie2_FiltrerLena.m (linje 8-9)
+        fc  = 0.8;
+        tau = 1/(2*pi*fc);
     else
         % Beregner samplingstiden Ts og implementer
         % sanntidsversjonen av et første ordens
-        % lavpassfilter og for å beregne u_f(k) 
-        % og sanntidsversjonen av bakoverderivasjon for 
+        % lavpassfilter og for å beregne u_f(k)
+        % og sanntidsversjonen av bakoverderivasjon for
         % å beregne v(k)
-        v(k) = 0;
-        u_f(k) = 0;
-        kant(k) = 0;
+
+        % Ref: LavpassFilter.m (linje 51-53)
+        Ts   = t(k) - t(k-1);
+        alfa = 1 - exp(-Ts/tau);
+        u_f(k) = (1-alfa)*u_f(k-1) + alfa*u(k); % 1.ordens lavpass
+
+        % Ref: BakoverDerivasjon.m (linje 31-32)
+        v(k) = (u_f(k) - u_f(k-1)) / Ts; % bakoverderivasjon
+
+        % Ref: Eksempel8_7.m (linje 30, 49)
+        kant(k) = abs(v(k)) > terskelverdi; % 0/1 kantdeteksjon
     end
     
     %--------------------------------------------------------------
