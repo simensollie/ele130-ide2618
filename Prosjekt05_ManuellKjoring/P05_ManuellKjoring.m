@@ -41,9 +41,9 @@
 %         EXPERIMENT SETUP, FILENAME AND FIGURE
 
 clear; close all   % rydd workspace først
-online   = true;   % true = mot EV3, false = bruk lagret datafil
-plotting = false;  % false gir flest målinger, anbefales for endelig kjøring
-filename = 'P05_MaalingManuellKjoring.mat';
+online   = false;   % true = mot EV3, false = bruk lagret datafil
+plotting = true;   % false gir flest målinger, anbefales for endelig kjøring
+filename = 'kjoring3-simen.mat';
 
 if online
     % Kobler opp LEGO og styrestikke
@@ -64,8 +64,14 @@ if online
     start(motorA);
     start(motorB);
 else
-    % Hvis online=false leses tidligere lagret data fra fil
+    % Hvis online=false leses tidligere lagret data fra fil.
+    % NB: load() overskriver workspace-variabler med samme navn som finnes
+    % i .mat-filen, så vi setter kontrollflaggene på nytt etter load.
+    saved_plotting = plotting;
     load(filename)
+    online   = false;
+    plotting = saved_plotting;
+    clear saved_plotting
 end
 
 % Lager en høy figur slik at det er plass til 4x2 subplots
