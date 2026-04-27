@@ -10,8 +10,10 @@
 % - Gyrosensor (måler vinkelen til roboten)
 %
 % Følgende motorer brukes:
-% - motor A (høyre hjul)
-% - motor B (venstre hjul)
+% - motor A (høyre hjul, koblet til EV3-port C)
+% - motor B (venstre hjul, koblet til EV3-port B)
+% Navnene "motor A" og "motor B" følger notasjonen i kapittel 9
+% (u_A, u_B, TV_A, TV_B); selve EV3-portene er B og C i vårt oppsett.
 %
 % Kilder og referanser:
 % - Oppgaven/teorien: Del-III_Kap9_Manuell_kjoring.pdf, kapittel 9.
@@ -54,11 +56,13 @@ if online
     myGyroSensor  = gyroSensor(mylego);
     resetRotationAngle(myGyroSensor);   % nullstiller gyro før start
 
-    % Motorer (A = høyre hjul, B = venstre hjul)
-    motorA = motor(mylego,'A');
+    % Motorer (motor A = høyre hjul = port C, motor B = venstre hjul = port B)
+    motorA = motor(mylego,'C');
     motorA.resetRotation;
     motorB = motor(mylego,'B');
     motorB.resetRotation;
+    start(motorA);
+    start(motorB);
 else
     % Hvis online=false leses tidligere lagret data fra fil
     load(filename)
@@ -80,6 +84,8 @@ skalering_sving   = 0.3;
 % Hvis lysmålingen blir veldig høy betyr det at sensoren er på hvitt,
 % og da skal programmet stoppe siden vi har kjørt ut av banen.
 hvit_grense = 80;
+
+MAX_SPEED = 300;
 %----------------------------------------------------------------------
 
 
@@ -187,8 +193,8 @@ while ~JoyMainSwitch
         % Sender pådragsverdier til motorene
         motorA.Speed = u_A(k);
         motorB.Speed = u_B(k);
-        start(motorA)
-        start(motorB)
+        %start(motorA)
+        %start(motorB)
     end
     %--------------------------------------------------------------
 

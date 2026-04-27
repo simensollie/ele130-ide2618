@@ -13,7 +13,7 @@
 
 clear; close all   % Alltid lurt å rydde workspace opp først
 online = true;     % Online mot EV3 eller mot lagrede data?
-plotting = false;  % Skal det plottes mens forsøket kjøres
+plotting = true;  % Skal det plottes mens forsøket kjøres
 filename = 'Serie1_Sprang.mat';
 
 if online
